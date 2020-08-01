@@ -1,0 +1,73 @@
+<!ELEMENT aigui (Functions,Toolbar)>
+<!ATTLIST aigui
+ date CDATA #IMPLIED
+>
+
+<!ELEMENT Functions (Function)*>
+
+<!ELEMENT Function (Options|Properties|Notebook)*>
+<!ATTLIST Function 
+ id   ID     #REQUIRED
+ succ CDATA  #IMPLIED
+>
+
+<!ELEMENT Properties (Entry)*>
+<!ATTLIST Properties 
+ id CDATA  #REQUIRED
+>
+<!ELEMENT Entry (#PCDATA)>
+<!ATTLIST Entry
+ key CDATA #REQUIRED
+>
+
+<!ELEMENT Options (Option|FileParam)*>
+<!ELEMENT Option (Value)*>
+<!ELEMENT Value (#PCDATA)>
+
+<!ELEMENT FileParam (FileFilter)*>
+<!ATTLIST FileParam
+  id          CDATA                            #REQUIRED
+  label       CDATA                            #REQUIRED
+  tooltip     CDATA                            #IMPLIED
+  option      CDATA                            #IMPLIED
+>
+
+<!ELEMENT FileFilter (#PCDATA)>
+<!ATTLIST FileFilter
+  desc       CDATA                             #REQUIRED
+  ext        CDATA                             #REQUIRED
+  selector   CDATA                             #IMPLIED
+>
+
+<!ATTLIST Options
+  id       CDATA                             #REQUIRED
+  title    CDATA                             #REQUIRED
+  columns  CDATA                             #IMPLIED
+  tooltip  CDATA                             #IMPLIED
+  compound (false | true)                    'false'
+>
+  
+<!ATTLIST Option
+  id       CDATA                             #REQUIRED
+  default  CDATA                             #IMPLIED
+  init     CDATA                             #IMPLIED
+  type     CDATA                             #REQUIRED
+  enabled  (false | true)                    'true'       
+  fill     (none  | both)                    'both'
+  tooltip  CDATA                             #REQUIRED
+>
+<!--
+      '+' not allowed in option list
+      type     (enum | text | text+enum )         #REQUIRED
+  -->
+<!ELEMENT Notebook (Command | Variable)*>
+<!ATTLIST Command
+  action     CDATA                    'eval'
+>
+<!ELEMENT Command (#PCDATA)>
+<!ELEMENT Variable (#PCDATA)>
+<!ATTLIST Variable
+  id       CDATA                             #REQUIRED
+>
+<!ELEMENT Toolbar (Button)*>
+<!ELEMENT Button (#PCDATA)>

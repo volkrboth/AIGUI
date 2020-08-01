@@ -1,0 +1,63 @@
+aigui Dokumentation
+-------------------
+
+Funktionen
+----------
+Initialization
+ReadNetlist
+CircuitEquations
+ReadSimulationData
+ACAnalysis
+*ComplexityEstimation
+*Statistics
+*ApproximateMatrixEquation
+*Solve
+*ApproximateTransferFunction
+*DominantPole
+*CompressMatrixEquation
+*PolesAndZerosByQZ
+ApproximateDeterminant
+*RootLocusByQZ
+*CharacteristicPolynomial
+
+Konfiguration
+-------------
+Die Konfiguration wird als XML-Datei gespeichert und befindet sich im Instal-
+lationsverzeichnis, Unterverzeichnis conf, Dateiname aiguiconf.xml.
+Die Konfiguration kann mit einer aiguiconf.xml im User-Homeverzeichnis, Unter-
+verzeichnis aigui überschrieben werden.
+Bei Windows: C:\Dokumente und Einstellungen\aigui\aiguiconf.xml
+Bei Linux/Unix: $HOME/aigui/aiguiconf.xml
+
+Aufbau der Konfigurationsdatei
+
+<aigui date="{date}">
+  <Functions>
+    <Function id="{function name}">
+	  <Option id="{option name}" default="{default value}" type="{data type}" 
+	          tooltip="{tooltip text"} [enabled="true | false"] >
+        <Value> first value </Value>
+	  </Option>
+    </Function>
+  </Functions>
+</aigui>
+
+States
+------
+States werden als xml-Datei in einem beliebigen Verzeichnis angelegt.
+
+Aufbau der state-Datei
+----------------------
+<aigui>
+  <States>
+    <Function id="{function name}">
+	  <Option id="{option name}"  >     <-- if values are changed -->
+        <Value> first value </Value>
+	  </Option>
+    <Variables>
+	  <Var id="{variable name}">{variable value}</Var>
+    </Variables>
+    <Notebook>
+	<Line id="{line nr}">{notebook line}</Line>
+    </Notebook>	
+    </Function>

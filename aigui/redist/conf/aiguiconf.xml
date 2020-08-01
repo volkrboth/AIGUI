@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aigui SYSTEM "aigui.dtd">
+<aigui date="2007-09-13 15:49:00">
+	<!--Configuration file for aigui
+author: Volker Boos
+volker.boos@imms.de
+-->
+	<Functions>
+		<Function id="Initialization" succ="ReadNetlist TestFunction">
+			<Options id="main" title="Initialisation commands">
+				<Option id="Commands" type="text" tooltip="valid notebook commands">
+					<Value>&lt;&lt;AnalogInsydes`</Value>
+					<!--"<<AnalogInsydes`IFX`"-->
+					<Value>Off[General::spell, General::spell1];</Value>
+					<Value>SetOptions[AnalogInsydes, ModelLibrary -&gt; {"FullModels`"}];</Value>
+					<Value>SetOptions[BodePlot,PlotPoints -&gt; 200,PlotRange-&gt; All];</Value>
+					<Value>SetOptions[LinearSolve, Method -&gt; Multifrontal];</Value>
+					<!--<Value>SetOptions[AnalogInsydes, ModelLibrary -&gt; {"IFXFullMOSFETModels`", "FullModels`"}]</Value>-->
+				</Option>
+			</Options>
+			<Options id="global" title="Global Options">
+				<Option id="InstanceNameSeparator" default="Inherited[AnalogInsydes]" tooltip="separator string for name components" type="text"/>
+				<Option id="LibraryPath" default="Inherited[AnalogInsydes]" tooltip="search path for device model libraries" type="text"/>
+				<Option id="ModelLibrary" default="Inherited[AnalogInsydes]" tooltip="default device model library" type="text"/>
+				<Option id="Protocol" default="StatusLine" tooltip="amount and location of protocol" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="Simulator" default="&quot;AnalogInsydes&quot;" tooltip="default simulator" type="text"/>
+				<Option id="UseExternals" default="True" tooltip="use external MathLink modules" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+			</Options>
+		</Function>
+		<Function id="ReadNetlist" succ="CircuitEquations TransientEquations Statistics">
+			<Options id="main" title="Main Options">
+				<Option id="Simulator" default="Inherited[AnalogInsydes]" tooltip="Netlist format" type="enum" enabled="false" fill="none">
+					<Value>"AnalogArtist"</Value>
+					<Value>"AnalogInsydes"</Value>
+					<Value>"Eldo"</Value>
+					<Value>"PSpice"</Value>
+					<Value>"Saber"</Value>
+					<Value>"SpectreS"</Value>
+					<Value>"Titan"</Value>
+				</Option>
+				<FileParam  id="NetlistFile" label="Netlist file:" option="Simulator" tooltip="file that contains the netlist">
+					<FileFilter selector="&quot;AnalogInsydes&quot;" desc="AnalogInsydes (*.m)"  ext="m" />
+					<FileFilter selector="&quot;AnalogArtist&quot;"  desc="Analog Artist (*.ai;*.ain)" ext="ai|ain"/>
+					<FileFilter selector="&quot;PSpice&quot;"        desc="PSpice Files (*.cir)" ext="cir"/>
+					<FileFilter selector="&quot;Titan&quot;"         desc="Titan Files (*.in.tit)" ext="in.tit"/>
+					<FileFilter selector="&quot;Eldo&quot;"          desc="Eldo Files (*.cir)" ext="cir"/>
+				</FileParam>
+				<FileParam  id="OppointFile" label="Op-point file:" option="Simulator" tooltip="file that contains the simulated operation point data">
+					<FileFilter selector="&quot;AnalogInsydes&quot;" desc="AnalogInsydes (*.m)"  ext="m" />
+					<FileFilter selector="&quot;AnalogArtist&quot;"  desc="(dcOpInfo.info included in netlist)" ext=""/>
+					<FileFilter selector="&quot;PSpice&quot;"        desc="PSpice Out Files (*.out)" ext="out"/>
+					<FileFilter selector="&quot;Titan&quot;"         desc="Titan Out Files (*.pr.tit)" ext="pr.tit"/>
+					<FileFilter selector="&quot;Eldo&quot;"          desc="Eldo Out Files (*.*)" ext="*"/>
+				</FileParam>
+			</Options>
+			<Options id="base" title="Basic Options">
+				<FileParam id="SchematicFile" label="Schematic:" tooltip="Schematic file">
+					<FileFilter desc="DXF files (*.dxf)" ext="dxf" />
+					<FileFilter desc="Notebook files (*.m)" ext="m" />
+				</FileParam>
+			</Options>
+			<Options id="adv" columns="2" title="Advanced Options">
+				<Option id="CharacterMapping" default="{&quot;_&quot; -&gt; &quot;$&quot;}" tooltip="List of Rules: {String -&gt; String, ...}" type="text"/>
+				<Option id="InstanceNameSeparator" default="Inherited[AnalogInsydes]" tooltip="String that evaluates to a Symbol" type="text"/>
+				<Option id="KeepPrefix" default="True" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="LevelSeparator" default="&quot;/&quot;" tooltip="String" type="text"/>
+				<Option id="LibraryPath" default="{&quot;.&quot;}" tooltip="String, List of Strings" type="text"/>
+				<Option id="ParseOnly" default="False" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="Protocol" default="Inherited[AnalogInsydes]" tooltip="List of valid Symbols" type="text+enum">
+					<Value>Inherited[AnalogInsydes]</Value>
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="UserPDKMap" default="None" tooltip="Symbol or Function" type="text"/>
+			</Options>
+		</Function><Function id="CircuitEquations" succ="ReadSimulationData ComplexityEstimation Statistics Solve CompressMatrixEquation PolesAndZerosByQZ ApproximateDeterminant RootLocusByQZ CharacteristicPolynomial">
+			<Notebook>
+				<Variable id="MatrixEquations">equations</Variable>
+			</Notebook>
+			<Options id="main" title="Main Options">
+			</Options>
+			<Options id="modlib" title="Model Library" tooltip="model library options">
+				<Option id="ModelLibrary" default="Inherited[AnalogInsydes]" tooltip="model libraries used" type="enum" enabled="false">
+					<Value>Inherited[AnalogInsydes]</Value>
+					<Value>"FullModels`"</Value>
+					<Value>"SimplifiedModels`"</Value>
+					<Value>"BasicModels`"</Value>
+					<Value>"IFXFullMOSFETModels`"</Value>
+					<Value>"IFXSimplifiedMOSFETModels`"</Value>
+					<Value>"IFXBasicMOSFETModels`"</Value>
+				</Option>
+				<Option id="DefaultSelector" default="Automatic" tooltip="Symbol or String" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="LibraryPath" default="Inherited[AnalogInsydes]" tooltip="String&quot;, &quot;List of Strings" type="text" />
+			</Options>
+			<Options id="adv1" columns="2" title="Analysis Mode" tooltip="Analysis Mode">
+				<Option id="AnalysisMode" default="" init="AC" tooltip="circuit analysis mode (default: AC)" type="enum">
+					<Value>AC</Value>
+					<Value>Transient</Value>
+				</Option>
+				<Option id="FrequencyVariable" default="s" tooltip="Symbol for complex Laplace frequency" type="text" />
+				<Option id="IndependentVariable" default="Automatic" tooltip="Symbol" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="InitialGuess" default="Automatic" tooltip="List of Rules: {Symbol -&gt; Real number, ...}" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="InitialTime" default="0" tooltip="initial time for transisent analysis (real number)" type="text" />
+				<Option id="TimeVariable" default="t" tooltip="Symbol for time in transient analysis" type="text" />
+			</Options>
+			<Options id="adv2" columns="2" title="Equation Formulation" tooltip="Equation Formulation">
+				<Option id="ElementValues" default="Value" init="Symbolic" tooltip="numeric or symbolic equations" type="enum" enabled="false">
+					<Value>Symbolic</Value>
+					<Value>Value</Value>
+				</Option>
+				<Option id="Formulation" default="ModifiedNodal" tooltip="circuit analysis formulation" type="enum" enabled="false">
+					<Value>ExtendedTableau</Value>
+					<Value>ModifiedNodal</Value>
+					<Value>SparseTableau</Value>
+				</Option>
+				<Option id="ConvertImmittances" default="True" tooltip="convert impedances to admittances" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="InitialConditions" default="None" tooltip="initial conditions for dynamics" type="enum">
+					<Value>All</Value>
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="MatrixEquation" default="True" tooltip="AC equations as matrix" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="Symbolic" default="All" tooltip="List of Rules: {String -&gt; Symbol or String, ...}&quot;, &quot;List of Rules: {List of Strings -&gt; List of Symbols or Strings, ...}" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="Value" default="None" tooltip="List of Rules: {String -&gt; Symbol or String, ...}&quot;, &quot;List of Rules: {List of Strings -&gt; List of Symbols or Strings, ...}" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+				</Option>
+			</Options>
+			<Options id="adv3" columns="2" title="Naming Conventions" tooltip="Naming Conventions">
+				<Option id="BranchCurrentPrefix" default="&quot;I$&quot;" tooltip="String that evaluates to a Symbol" type="text" />
+				<Option id="BranchVoltagePrefix" default="&quot;V$&quot;" tooltip="String that evaluates to a Symbol" type="text" />
+				<Option id="ControllingCurrentPrefix" default="&quot;IC$&quot;" tooltip="String that evaluates to a Symbol" type="text" />
+				<Option id="ControllingVoltagePrefix" default="&quot;VC$&quot;" tooltip="String that evaluates to a Symbol" type="text" />
+				<Option id="InstanceNameSeparator" default="Inherited[AnalogInsydes]" tooltip="String that evaluates to a Symbol" type="text" />
+				<Option id="NodeVoltagePrefix" default="&quot;V$&quot;" tooltip="String that evaluates to a Symbol" type="text" />
+			</Options>
+			<Options id="adv4" columns="2" title="Other" tooltip="other advanced options">
+				<Option id="Protocol" default="Inherited[AnalogInsydes]" tooltip="List of valid Symbols" type="text+enum" enabled="false">
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="DesignPoint" default="Automatic" tooltip="List of Rules: {Symbol -&gt; Real number, ...}" type="text+enum">
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="IgnoreMissingGround" default="False" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="KeepZeroParameters" default="None" tooltip="Symbol or String&quot;, &quot;List of Symbols or Strings" type="text+enum">
+					<Value>None</Value>
+				</Option>
+				<Option id="ModeValues" default="None" tooltip="{}" type="enum">
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+			</Options>
+		</Function>
+		<Function id="ReadSimulationData" succ="ACAnalysis">
+			<Options id="main" title="Main Options">
+				<Option id="Simulator" default="&quot;AnalogInsydes&quot;" tooltip="Data from numeric simulator" type="enum" enabled="false">
+					<Value></Value>
+					<Value>"AnalogInsydes"</Value>
+					<Value>"Eldo"</Value>
+					<Value>"PSpice"</Value>
+					<Value>"Saber"</Value>
+					<Value>"Spectre"</Value>
+					<Value>"SpectreS"</Value>
+				</Option>
+				<FileParam id="jtfOpenCir" label="AC sim results:" option="Simulator" tooltip="file that contains the AC simulation results">
+					<FileFilter selector="&quot;AnalogInsydes&quot;" desc="AnalogInsydes (*.m)" ext="m" />
+					<FileFilter selector="&quot;Spectre&quot;" desc="Spectre AC results (ac.ac)" ext="ac" />
+					<FileFilter selector="&quot;PSpice&quot;" desc="CDSF Files (*.csd)" ext="csd" />
+					<FileFilter selector="&quot;PSpice&quot;" desc="CDSF Files (*.txt)" ext="txt" />
+					<FileFilter selector="&quot;SpectreS&quot;" desc="SpectreS AC results (ac.ac)" ext="ac" />
+					<FileFilter selector="&quot;Eldo&quot;" desc="Eldo Files (*.cou)" ext="cou" />
+					<FileFilter selector="&quot;Saber&quot;" desc="SaberScope files (*.cou)" ext="cou" />
+				</FileParam>
+			</Options>
+			<Options id="base" title="Basic Options">
+			</Options>
+			<Options id="adv" columns="2" title="Advanced Options">
+				<Option id="InterpolationOrder" default="1" tooltip="positive Integer number" type="text" />
+				<Option id="MappingFiles" default="None" tooltip="String&quot;, &quot;List of Strings" type="text+enum">
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="ParseOnly" default="False" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="Protocol" default="Inherited[AnalogInsydes]" tooltip="List of valid Symbols" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="ShowHeader" default="False" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+			</Options>
+		</Function><Function id="ACAnalysis" succ="Solve ApproximateMatrixEquation PolesAndZerosByQZ">
+			<Options id="main" title="Main Options">
+				<Option id="ACRangeMin" default="" tooltip="Min frequency for AC analysis" type="text"/>
+				<Option id="ACRangeMax" default="" tooltip="Max frequency for AC analysis" type="text"/>
+			</Options>
+			<Options id="adv" columns="2" title="Advanced Options">
+				<Option id="FrequencyVariable" default="Automatic" tooltip="Symbol" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="InterpolationOrder" default="1" tooltip="positive Integer number" type="text"/>
+				<Option id="PointsPerDecade" default="10" tooltip="positive Integer number" type="text"/>
+				<Option id="Protocol" default="Inherited[AnalogInsydes]" tooltip="List of valid Symbols" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="SweepPath" default="2.*Pi*I*#1 &amp; " tooltip="Symbol or Function" type="text"/>
+				<Option id="UseExternals" default="Inherited[AnalogInsydes]" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+			</Options>
+			<Options id="BodePlot" title="Bode Plot">
+				<Option id="FrequencyScaling" default="Exponential" tooltip="Scaling of the f axis" type="enum">
+					<Value>Exponential</Value>
+					<Value>Linear</Value>
+				</Option>
+				<Option id="MagnitudeDisplay" default="Decibels" tooltip="Scaling of the magitude" type="enum">
+					<Value>Decibels</Value>
+					<Value>AbsoluteValues</Value>
+					<Value>Linear</Value>
+				</Option>
+				<Option id="PhaseDisplay" default="Degrees" tooltip="Scaling of the phase" type="enum">
+					<Value>Degrees</Value>
+					<Value>Radians</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="UnwrapPhase" default="False" tooltip="False: [0&#x00B0;,360&#x00B0;]; True: continous" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+			</Options>			
+		</Function>
+		
+		
+		<Function id="TransientEquations" succ="Statistics NDAESolve">
+			<Notebook>
+				<Variable id="TranEquations">tranequations</Variable>
+				<Command action="eval">%TranEquations% = CircuitEquations[%Netlist% %Options%] </Command>
+				<Command action="equations">DisplayForm[%TranEquations%] </Command>
+			</Notebook>
+			<Options id="main" title="Main Options">
+			</Options>
+			<Options id="modlib" title="Model Library" tooltip="model library options">
+				<Option id="ModelLibrary" default="Inherited[AnalogInsydes]" tooltip="model libraries used" type="enum" enabled="false">
+					<Value>Inherited[AnalogInsydes]</Value>
+					<Value>"FullModels`"</Value>
+					<Value>"SimplifiedModels`"</Value>
+					<Value>"BasicModels`"</Value>
+					<Value>"IFXFullMOSFETModels`"</Value>
+					<Value>"IFXSimplifiedMOSFETModels`"</Value>
+					<Value>"IFXBasicMOSFETModels`"</Value>
+				</Option>
+				<Option id="DefaultSelector" default="Automatic" tooltip="Symbol or String" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="LibraryPath" default="Inherited[AnalogInsydes]" tooltip="String&quot;, &quot;List of Strings" type="text"/>
+			</Options>
+			<Options id="adv1" columns="2" title="Analysis Mode" tooltip="Analysis Mode">
+				<Option id="AnalysisMode" default="" init="Transient" tooltip="circuit analysis mode (Transient only)" type="enum" enabled="false">
+					<Value>Transient</Value>
+				</Option>
+				<Option id="FrequencyVariable" default="s" tooltip="Symbol for complex Laplace frequency" type="text"/>
+				<Option id="IndependentVariable" default="Automatic" tooltip="Symbol" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="InitialGuess" default="Automatic" tooltip="List of Rules: {Symbol -&gt; Real number, ...}" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="InitialTime" default="0" tooltip="initial time for transisent analysis (real number)" type="text"/>
+				<Option id="TimeVariable" default="t" tooltip="Symbol for time in transient analysis" type="text"/>
+			</Options>
+			<Options id="adv2" columns="2" title="Equation Formulation" tooltip="Equation Formulation">
+				<Option id="ElementValues" default="Value" init="Symbolic" tooltip="numeric or symbolic equations" type="enum" enabled="false">
+					<Value>Symbolic</Value>
+					<Value>Value</Value>
+				</Option>
+				<Option id="Formulation" default="ModifiedNodal" tooltip="circuit analysis formulation" type="enum" enabled="false">
+					<Value>ExtendedTableau</Value>
+					<Value>ModifiedNodal</Value>
+					<Value>SparseTableau</Value>
+				</Option>
+				<Option id="ConvertImmittances" default="True" tooltip="convert impedances to admittances" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="InitialConditions" default="None" tooltip="initial conditions for dynamics" type="enum">
+					<Value>All</Value>
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="MatrixEquation" default="True" init="False" tooltip="False for transient analysis" type="enum" enabled="false">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="Symbolic" default="All" tooltip="List of Rules: {String -&gt; Symbol or String, ...}&quot;, &quot;List of Rules: {List of Strings -&gt; List of Symbols or Strings, ...}" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="Value" default="None" tooltip="List of Rules: {String -&gt; Symbol or String, ...}&quot;, &quot;List of Rules: {List of Strings -&gt; List of Symbols or Strings, ...}" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+				</Option>
+			</Options>
+			<Options id="adv3" columns="2" title="Naming Conventions" tooltip="Naming Conventions">
+				<Option id="BranchCurrentPrefix" default="&quot;I$&quot;" tooltip="String that evaluates to a Symbol" type="text"/>
+				<Option id="BranchVoltagePrefix" default="&quot;V$&quot;" tooltip="String that evaluates to a Symbol" type="text"/>
+				<Option id="ControllingCurrentPrefix" default="&quot;IC$&quot;" tooltip="String that evaluates to a Symbol" type="text"/>
+				<Option id="ControllingVoltagePrefix" default="&quot;VC$&quot;" tooltip="String that evaluates to a Symbol" type="text"/>
+				<Option id="InstanceNameSeparator" default="Inherited[AnalogInsydes]" tooltip="String that evaluates to a Symbol" type="text"/>
+				<Option id="NodeVoltagePrefix" default="&quot;V$&quot;" tooltip="String that evaluates to a Symbol" type="text"/>
+			</Options>
+			<Options id="adv4" columns="2" title="Other" tooltip="other advanced options">
+				<Option id="Protocol" default="Inherited[AnalogInsydes]" tooltip="List of valid Symbols" type="text+enum" enabled="false">
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="DesignPoint" default="Automatic" tooltip="List of Rules: {Symbol -&gt; Real number, ...}" type="text+enum">
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="IgnoreMissingGround" default="False" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="KeepZeroParameters" default="None" tooltip="Symbol or String&quot;, &quot;List of Symbols or Strings" type="text+enum">
+					<Value>None</Value>
+				</Option>
+				<Option id="ModeValues" default="None" tooltip="{}" type="enum">
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+			</Options>
+		</Function>
+		<!-- ApproximateMatrixEquation -->
+		<Function id="ApproximateMatrixEquation" succ="ACAnalysis ComplexityEstimation Statistics Solve CompressMatrixEquation PolesAndZerosByQZ RootLocusByQZ CharacteristicPolynomial">
+			<Options id="base" title="Basic Options">
+				<Option id="Protocol" default="Inherited[AnalogInsydes]" init="None" tooltip="List of valid Symbols" type="text+enum" enabled="false">
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="CompressEquations" default="False" init="True" tooltip="{}" type="enum" enabled="false">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+			</Options>
+			<Options id="adv" columns="2" title="Advanced Options" tooltip="Advanced Options">
+				<Option id="AbsolutePivotThreshold" default="1.*^-8" tooltip="positive Real number" type="text"/>
+				<Option id="DesignPoint" default="Automatic" tooltip="List of Rules: {Symbol -&gt; Real number, ...}" type="text+enum">
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="NumericalAccuracy" default="1.*^-8" tooltip="positive Real number" type="text"/>
+				<Option id="PivotThreshold" default="0.01" tooltip="Real number between 0 and 1" type="text"/>
+				<Option id="QuasiSingularity" default="1.*^-15" tooltip="positive Real number" type="text"/>
+				<Option id="RecomputationThreshold" default="2." tooltip="positive Real number" type="text"/>
+				<Option id="RecordCancellations" default="False" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="SortingMethod" default="PrimaryDesignPoint" tooltip="{}" type="enum">
+					<Value>LeastMeanInfluence</Value>
+					<Value>PrimaryDesignPoint</Value>
+				</Option>
+				<Option id="StripIndependentBlocks" default="False" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="UseExternals" default="Inherited[AnalogInsydes]" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+			</Options>
+		</Function>
+		<Function id="Solve" succ="ApproximateTransferFunction DominantPole DominantZero">
+		</Function>
+		<Function id="ApproximateTransferFunction" succ="DominantPole DominantZero">
+		</Function>
+		<Function id="PolesAndZerosByQZ" succ="CompressMatrixEquation ApproximateDeterminant">
+		</Function>
+		<Function id="CompressMatrixEquation" succ="ComplexityEstimation Statistics Solve CompressMatrixEquation PolesAndZerosByQZ ApproximateDeterminant RootLocusByQZ CharacteristicPolynomial">
+		</Function>
+		<Function id="ApproximateDeterminant" succ="ComplexityEstimation ApproximateMatrixEquation Statistics Solve CompressMatrixEquation PolesAndZerosByQZ RootLocusByQZ CharacteristicPolynomial">
+			<Options id="base" title="Basic Options" tooltip="Basic Options">
+				<Option id="MaxIterations" default="3" tooltip="positive Integer number" type="text" enabled="false"/>
+				<Option id="MaxResidual" default="Automatic" tooltip="positive Real number" type="text+enum" enabled="false">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="SingularityTest" default="SingularityTestByLU" tooltip="Symbol or Function" type="text+enum" enabled="false">
+					<Value>SingularityTestByLU</Value>
+					<Value>SingularityTestByQR</Value>
+				</Option>
+				<Option id="GEPSolverOptions" default="Automatic" tooltip="List of Rules: {option -&gt; value, ...}" type="text+enum" enabled="false">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="Debug" default="" init="" type="enum" tooltip="debug option">
+					<Value></Value>
+					<Value>True</Value>
+					<Value>False</Value>
+				</Option>
+			</Options>
+			<Options id="adv" columns="2" title="Advanced Options" tooltip="Advanced Options">
+				<Option id="AccuracyGoal" default="" init="8" tooltip="positive Integer number" type="text"/>
+				<Option id="DesignPoint" default="Automatic" tooltip="List of Rules: {Symbol -&gt; Real number, ...}" type="text+enum">
+					<Value>Automatic</Value>
+					<Value>None</Value>
+				</Option>
+				<Option id="ErrorFunction" default="Automatic" tooltip="Symbol or Function" type="text+enum">
+					<Value>Automatic</Value>
+					<Value>DirectedLogError</Value>
+					<Value>LogError</Value>
+				</Option>
+				<Option id="FrequencyVariable" default="Automatic" tooltip="Symbol" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="GEPSolver" default="LREigenpair" tooltip="Symbol or Function" type="text+enum">
+					<Value>GeneralizedEigensystem</Value>
+					<Value>LREigenpair</Value>
+				</Option>
+				<Option id="InitialSolution" default="Automatic" tooltip="numeric-valued List Expression" type="text+enum">
+					<Value>Automatic</Value>
+				</Option>
+				<Option id="MaxDivergentSteps" default="1" tooltip="nonnegative Integer number" type="text"/>
+				<Option id="MaxShift" default="1." tooltip="positive Real number" type="text"/>
+				<Option id="MinMAC" default="0.95" tooltip="Real number between 0 and 1" type="text"/>
+				<Option id="Prescaling" default="True" tooltip="{}" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="ProjectionVectors" default="{LeftEigenvector, RightEigenvector}" tooltip="List of two Symbols or Functions" type="text"/>
+				<Option id="Protocol" default="Inherited[AnalogInsydes]" tooltip="List of valid Symbols" type="text+enum">
+					<Value>All</Value>
+					<Value>None</Value>
+					<Value>Notebook</Value>
+					<Value>StatusLine</Value>
+				</Option>
+				<Option id="TestFrequency" default="1." tooltip="Complex number" type="text"/>
+				<Option id="Tolerance" default="0.05" tooltip="positive Real number" type="text+enum">
+					<Value>Infinity</Value>
+				</Option>
+			</Options>
+		</Function>
+		<Function id="RootLocusByQZ">
+			<Options id="plot" title="RootLocus Plot Options" tooltip="RootLocusByQZ Plot Options">
+				<Option id="PlotRange" default="Automatic" init="100000000" tooltip="plot range" type="text"/>
+				<Option id="LinearRegionLimit" default="1.0" init="\[Infinity]" tooltip="extent of linearly scaled plot region" type="text"/>
+				<Option id="ShowLegend" default="True" init="False" tooltip="whether to display a plot legend" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+			</Options>
+			<Options id="animation" title="Animation Options" tooltip="Animation Options">
+				<Option id="Loop" default="False" init="True" tooltip="animate in endless loop" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="AnimationDisplayTime" default="0.5" tooltip="animation display time" type="text"/>
+				<Option id="ImageSize" default="250" tooltip="image size" type="text"/>
+			</Options>
+		</Function>
+		<Function id="DominantPole"/>
+		<Function id="DominantZero"/>
+		<Function id="CharacteristicPolynomial"/>
+		<Function id="ComplexityEstimation"/>
+		<Function id="Statistics"/>
+		<Function id="NDAESolve" succ="ACEquations">
+			<Options id="main" title="NDAESolve Options" tooltip="NDAE Solve Options">
+				<Option id="tstart" default="0" tooltip="Simulation start time" type="text"/>
+				<Option id="tend" default="100" tooltip="Simulation end time" type="text"/>
+			</Options>
+			<Options id="ndae" columns="2" title="NDAE Options" tooltip="NDAESolve options">
+			</Options>
+			<Options id="plot" columns="2" title="Plot Options" tooltip="Transient plot options">
+				<Option id="SingleDiagram" default="True" init="True" tooltip="All graphs in a single diagram" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="ShowSamplePoints" default="False" init="False" tooltip="generates a ListPlot of the simulation data" type="enum">
+					<Value>False</Value>
+					<Value>True</Value>
+				</Option>
+				<Option id="PlotRange" default="All" tooltip="Automatic | All | {{ymin,ymax},...}" type="text+enum">
+					<Value>Automatic</Value>
+					<Value>All</Value>
+				</Option>
+				<Option id="PlotPoints" default="100" tooltip="Simulation end time" type="text"/>
+			</Options>
+		</Function>
+		<Function id="ACEquations" succ="ACAnalysis ComplexityEstimation Statistics Solve CompressMatrixEquation ApproximateMatrixEquation">
+			<Options id="Options" columns="2" title="ACEq.-Options" tooltip="ACEquation options">
+				<Option id="FrequencyVariable" default="Automatic" init="Automatic" tooltip="Name of the frequency variable" type="text"/>
+				<Option id="DerivativePostfix" default="d" init="d" tooltip="Postfix of derivated variable names" type="text"/>
+				<Option id="OperatingPointPostfix" default="$op" init="$op" tooltip="Postfix of operating point variable" type="text"/>
+			</Options>
+			<Notebook>
+				<Variable id="OperatingPoint">oppoint</Variable>
+				<Variable id="MatrixEquations">equations</Variable>
+				<Command action="eval"><![CDATA[ %OperatingPoint% = First@NDAESolve[%TranEquations%,{t, %t0%} %Options%] ]]></Command>
+				<Command action="eval"><![CDATA[ %MatrixEquations% = ACEquations[%TranEquations%,%OperatingPoint%,{%sources%}] ]]></Command>
+				<Command action="equations"><![CDATA[ DisplayForm[%MatrixEquations%] ]]></Command>
+			</Notebook>
+		</Function>
+		<Function id="UserBox">
+		</Function>
+		<Function id="TestFunction" succ="TestFunction">
+			<Options id="options" columns="2" title="Test Options" tooltip="Test Options">
+				<Option id="ComboBox" default="first value" tooltip="Enter text or select" type="text+enum">
+					<Value>first value</Value>
+					<Value>second value</Value>
+				</Option>
+				<Option id="Option1" default="1" tooltip="Enter value for option1" type="text"/>
+			</Options>
+			<Notebook>
+				<Variable id="Test">random</Variable>
+				<Command action="eval"><![CDATA[ %Test% = RandomReal[] ]]></Command>
+				<Command action="display"><![CDATA[ DisplayForm[%Test%] ]]></Command>
+			</Notebook>
+		</Function>
+		
+	</Functions>
+	
+	<Toolbar>
+		<Button>ReadNetlist</Button>
+		<Button>CircuitEquations</Button>
+		<Button>ReadSimulationData</Button>
+		<Button>ACAnalysis</Button>
+		<Button>TransientEquations</Button>
+		<Button>ApproximateMatrixEquation</Button>
+		<Button>Solve</Button>
+		<Button>NDAESolve</Button>
+		<Button>ApproximateTransferFunction</Button>
+		<Button>PolesAndZerosByQZ</Button>
+		<Button>CompressMatrixEquation</Button>
+		<Button>ApproximateDeterminant</Button>
+		<Button>RootLocusByQZ</Button>
+		<Button>DominantPole</Button>
+		<Button>DominantZero</Button>
+		<Button>CharacteristicPolynomial</Button>
+		<Button>ComplexityEstimation</Button>
+		<Button>Statistics</Button>
+		<Button>ACEquations</Button>
+	</Toolbar>
+</aigui>

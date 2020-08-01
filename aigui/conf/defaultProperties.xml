@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>aigui default properties</comment>
+<entry key="notebookOrder">branchOrder</entry>
+<entry key="aiVersionDetection">autoDetect</entry>
+<entry key="aiVersion">aiVersion2</entry>
+<entry key="otherKernelLink">???</entry>
+<entry key="unixKernelLink">math</entry>
+<entry key="windowsKernelLink">%PROGRAMFILES%\Wolfram Research\Mathematica\6.0\mathkernel.exe</entry>
+<entry key="operatingSystem">unix</entry>
+</properties>

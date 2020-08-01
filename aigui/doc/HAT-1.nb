@@ -1,0 +1,363 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.0'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      6972,        254]*)
+(*NotebookOutlinePosition[      7679,        278]*)
+(*  CellTagsIndexPosition[      7635,        274]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["    HAT mit  Mathematica ", "Title"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(\(mat = {{a, \@\(a\ b\), 0}, {\@\(a\ b\), b, 0}, {0, 0, 
+            2}};\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(Eij = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[mat\  - \[Lambda]*Eij]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(a - \[Lambda]\), \(\@\(a\ b\)\), "0"},
+            {\(\@\(a\ b\)\), \(b - \[Lambda]\), "0"},
+            {"0", "0", \(2 - \[Lambda]\)}
+            }], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(deter = Det[mat\  - \[Lambda]*Eij]\)], "Input"],
+
+Cell[BoxData[
+    \(\((2 - \[Lambda])\)\ \((\(-a\)\ \[Lambda] - 
+          b\ \[Lambda] + \[Lambda]\^2)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[deter \[Equal] 0, \[Lambda]]\ \  // Simplify\)], "Input"],
+
+Cell[BoxData[
+    \({{\[Lambda] \[Rule] 0}, {\[Lambda] \[Rule] 2}, {\[Lambda] \[Rule] 
+          a + b}}\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+   Achtung: Eleganter geht es mit dem Befehl \"Eigenvalues\" (mit ge\
+\[ADoubleDot]nderter Reihenfolge der \[Lambda]i)\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({\[Lambda]1, \ \[Lambda]2, \ \[Lambda]3} = \ 
+      Eigenvalues[mat]\)], "Input"],
+
+Cell[BoxData[
+    \({2, 0, a + b}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\[Lambda]1 + \[Lambda]2 + \[Lambda]3\ \  // 
+      Simplify\), "\[IndentingNewLine]", 
+    \(\[Lambda]1*\[Lambda]2 + \[Lambda]2*\[Lambda]3 + \[Lambda]3*\[Lambda]1 // 
+      Simplify\), "\[IndentingNewLine]", 
+    \(\[Lambda]1*\[Lambda]2*\[Lambda]3 // Simplify\)}], "Input"],
+
+Cell[BoxData[
+    \(2 + a + b\)], "Output"],
+
+Cell[BoxData[
+    \(2\ \((a + b)\)\)], "Output"],
+
+Cell[BoxData[
+    \(0\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+  Hinweis: Der Befehl\"Eigensystem\" liefert Eigenwerte und Eigenvektoren; \
+letztere sind aber nicht normiert !\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Eigensystem[mat]\)], "Input"],
+
+Cell[BoxData[
+    \({{2, 0, 
+        a + b}, {{0, 0, 1}, {\(-\(\@\(a\ b\)\/a\)\), 1, 0}, {\@\(a\ b\)\/b, 
+          1, 0}}}\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+  \"Eigenvectors\" liefert nur die Eigenvektoren; diese  sind orthogonal aber \
+nicht normiert !\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\({v1, v2, v3} = {\(-\(\@\(a\ b\)\/a\)\), 1, 
+          0};\)\), "\[IndentingNewLine]", 
+    \(v0 = 
+      Sqrt[v1^2 + v2^2 + 
+          v3^2]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  (*\ \ Betrag\ \
+ausrechnen\ *) \), "\[IndentingNewLine]", 
+    \({v1/v0, v2/v0, v3/v0}\  // Simplify\)}], "Input"],
+
+Cell[BoxData[
+    \(\@\(1 + b\/a\)\)], "Output"],
+
+Cell[BoxData[
+    \({\(-\(b\/\(\@\(a\ b\)\ \@\(\(a + b\)\/a\)\)\)\), 1\/\@\(\(a + b\)\/a\), 
+      0}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\({v1, v2, v3} = {\@\(a\ b\)\/b, 1, 0};\)\), "\[IndentingNewLine]", 
+    \(v0 = 
+      Sqrt[v1^2 + v2^2 + 
+          v3^2]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  (*\ \ Betrag\ ausrechnen\ \
+*) \), "\[IndentingNewLine]", 
+    \({v1/v0, v2/v0, v3/v0}\  // Simplify\)}], "Input"],
+
+Cell[BoxData[
+    \(\@\(1 + a\/b\)\)], "Output"],
+
+Cell[BoxData[
+    \({a\/\(\@\(a\ b\)\ \@\(\(a + b\)\/b\)\), 1\/\@\(\(a + b\)\/b\), 
+      0}\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+  Die Eigenvektoren symm. Matrizen bilden eine orthogonale Matrix, mit deren \
+Hilfe die HAT ausgef\[UDoubleDot]hrt werden kann.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(orthogMat = {{0, 0, 
+          1}, {\(-\(b\/\(\@\(a\ b\)\ \@\(\(a + b\)\/a\)\)\)\), 
+          1\/\@\(\(a + b\)\/a\), 0}, {a\/\(\@\(a\ b\)\ \@\(\(a + b\)\/b\)\), 
+          1\/\@\(\(a + b\)\/b\), 0}}\)], "Input"],
+
+Cell[BoxData[
+    \({{0, 0, 1}, {\(-\(b\/\(\@\(a\ b\)\ \@\(\(a + b\)\/a\)\)\)\), 
+        1\/\@\(\(a + b\)\/a\), 0}, {a\/\(\@\(a\ b\)\ \@\(\(a + b\)\/b\)\), 
+        1\/\@\(\(a + b\)\/b\), 0}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Inverse[orthogMat] == Transpose[orthogMat]\  // Simplify\)], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+  Achtung: Mathematica speichert die Vektoren zeilenweise ab; das ist eine \
+ergiebige Fehlerquelle!\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(matHAT = 
+        orthogMat . mat . Transpose[orthogMat] // 
+          Simplify\ ;\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[matHAT]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"2", "0", "0"},
+            {"0", "0", "0"},
+            {"0", "0", \(a + b\)}
+            }], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Die Tensorfl\[ADoubleDot]che ist ein  elliptischer Zylinder  (mit y-Achse = \
+Symm.-achse, falls a+b >0)!\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({x, y, z} . \ matHAT . {x, y, z}\)], "Input"],
+
+Cell[BoxData[
+    \(2\ x\^2 + \((a + b)\)\ z\^2\)], "Output"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.0 for Microsoft Windows",
+ScreenRectangle->{{0, 1280}, {0, 927}},
+WindowSize->{911, 740},
+WindowMargins->{{75, Automatic}, {Automatic, 38}},
+PrintingCopies->1,
+PrintingPageRange->{Automatic, Automatic}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 42, 0, 95, "Title"],
+
+Cell[CellGroupData[{
+Cell[1843, 57, 287, 5, 93, "Input"],
+Cell[2133, 64, 330, 8, 81, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2500, 77, 67, 1, 30, "Input"],
+Cell[2570, 80, 119, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2726, 87, 83, 1, 30, "Input"],
+Cell[2812, 90, 118, 2, 29, "Output"]
+}, Open  ]],
+Cell[2945, 95, 142, 3, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[3112, 102, 101, 2, 30, "Input"],
+Cell[3216, 106, 47, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3300, 112, 294, 5, 70, "Input"],
+Cell[3597, 119, 43, 1, 29, "Output"],
+Cell[3643, 122, 48, 1, 29, "Output"],
+Cell[3694, 125, 35, 1, 29, "Output"]
+}, Open  ]],
+Cell[3744, 129, 136, 3, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[3905, 136, 49, 1, 30, "Input"],
+Cell[3957, 139, 137, 3, 47, "Output"]
+}, Open  ]],
+Cell[4109, 145, 120, 3, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[4254, 152, 320, 7, 90, "Input"],
+Cell[4577, 161, 48, 1, 51, "Output"],
+Cell[4628, 164, 115, 2, 68, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4780, 171, 294, 6, 90, "Input"],
+Cell[5077, 179, 48, 1, 51, "Output"],
+Cell[5128, 182, 106, 2, 68, "Output"]
+}, Open  ]],
+Cell[5249, 187, 152, 3, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[5426, 194, 232, 4, 68, "Input"],
+Cell[5661, 200, 206, 3, 68, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5904, 208, 89, 1, 30, "Input"],
+Cell[5996, 211, 38, 1, 29, "Output"]
+}, Open  ]],
+Cell[6049, 215, 124, 3, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[6198, 222, 173, 4, 50, "Input"],
+Cell[6374, 228, 272, 8, 71, "Output"]
+}, Open  ]],
+Cell[6661, 239, 129, 3, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[6815, 246, 65, 1, 30, "Input"],
+Cell[6883, 249, 61, 1, 29, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,517 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     10419,        385]*)
+(*NotebookOutlinePosition[     11063,        407]*)
+(*  CellTagsIndexPosition[     11019,        403]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell["\<\
+Let's say you have a system governed by the following equations:\
+\>", "Text"],
+
+Cell[BoxData[
+    \(dXa = 3*Xa^2 + 2*Xb + Fo\)], "Input"],
+
+Cell[BoxData[
+    \(dXb = 6*Xa + 9*Sb^2 + Xa*Xb + Fo\)], "Input"],
+
+Cell[BoxData[
+    \(Y = Xa^2 + 3*Fo^2\)], "Input"],
+
+Cell["\<\
+In this case, Xa and Xb are state variables (they describe the state of the \
+system at any given time), Fo is an input variable (it enters the system and \
+is independent of all of the state variables), and Y is the output of the \
+system and is dependent on both the state and input variables.  Please use \
+this Mathematica notebook to linearize this system of equations.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MX = {{dXa}, {dXb}}\)], "Input"],
+
+Cell[BoxData[
+    \({{Fo + 3\ Xa\^2 + 2\ Xb}, {Fo + 9\ Sb\^2 + 6\ Xa + Xa\ Xb}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(XJacobianColumn1 = D[MX, Xa]\)], "Input"],
+
+Cell[BoxData[
+    \({{6\ Xa}, {6 + Xb}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(XJacobianColumn2 = D[MX, Xb]\)], "Input"],
+
+Cell[BoxData[
+    \({{2}, {Xa}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(<< LinearAlgebra`MatrixManipulation`\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(XJacobian = AppendRows[XJacobianColumn1, XJacobianColumn2]\)], "Input"],
+
+Cell[BoxData[
+    \({{6\ Xa, 2}, {6 + Xb, Xa}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[XJacobian]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(6\ Xa\), "2"},
+            {\(6 + Xb\), "Xa"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FoJacobian = D[MX, Fo]\)], "Input"],
+
+Cell[BoxData[
+    \({{1}, {1}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[FoJacobian]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"1"},
+            {"1"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(XSS = {{Xa - Xas}, {Xb - Xbs}}\)], "Input"],
+
+Cell[BoxData[
+    \({{Xa - Xas}, {Xb - Xbs}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[XSS]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(Xa - Xas\)},
+            {\(Xb - Xbs\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FoSS = {{Fo - Fos}}\)], "Input"],
+
+Cell[BoxData[
+    \({{Fo - Fos}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[FoSS]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(Fo - Fos\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{\(Now\ that\ we\ have\ our\ Jacobian\ and\ deviation\ matrices\ \
+for\ the\ state\ variables\), ",", " ", \(Xa\ and\ Xb\), ",", " ", 
+      RowBox[{
+        RowBox[{
+        "we", " ", "can", " ", "construct", " ", "the", " ", "linearized", 
+          " ", "system", " ", "for", " ", "these", " ", 
+          RowBox[{"variables", ":", "\[IndentingNewLine]", 
+            RowBox[{"(", GridBox[{
+                  {\(\(d \((Xa - Xas)\)\)\/dt\)},
+                  {\(\(d \((Xb - Xbs)\)\)\/dt\)}
+                  }], ")"}]}]}], "=", 
+        RowBox[{
+          RowBox[{
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(6\ Xa\), "2"},
+                    {\(6 + Xb\), "Xa"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]], 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(Xa - Xas\)},
+                    {\(Xb - Xbs\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]]}], "+", 
+          RowBox[{
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1"},
+                    {"1"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]], 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(Fo - Fos\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]]}]}]}]}]], "Input"],
+
+Cell["\<\
+Now, let's follow the same procedure for the output variable, Y:\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(YJacobianColumn1 = D[Y, Xa]\)], "Input"],
+
+Cell[BoxData[
+    \(2\ Xa\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(YJacobianColumn2 = D[Y, Xb]\)], "Input"],
+
+Cell[BoxData[
+    \(0\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(YJacobian = {{2*Xa, 0}}\)], "Input"],
+
+Cell[BoxData[
+    \({{2\ Xa, 0}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[YJacobian]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(2\ Xa\), "0"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(dYdF = D[Y, Fo]\)], "Input"],
+
+Cell[BoxData[
+    \(6\ Fo\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(YSS = {{Y - Ys}}\)], "Input"],
+
+Cell[BoxData[
+    \({{3\ Fo\^2 + Xa\^2 - Ys}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[YSS]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(3\ Fo\^2 + Xa\^2 - Ys\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{\(The\ linearized\ system\ for\ our\ output\ variable\), ",", " ",
+       "Y", ",", " ", 
+      RowBox[{
+        RowBox[{"can", " ", "be", " ", "constructed", " ", "as", " ", 
+          RowBox[{"follows", ":", "\[IndentingNewLine]", 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(3\ Fo\^2 + Xa\^2 - Ys\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]]}]}], "=", 
+        RowBox[{
+          RowBox[{
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(2\ Xa\), "0"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]], 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(Xa - Xas\)},
+                    {\(Xb - Xbs\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]]}], 
+          "+", \(\((6\ Fo)\) \((3\ Fo\^2 + Xa\^2 - Ys)\)\)}]}]}]], "Input"]
+},
+FrontEndVersion->"5.2 for Microsoft Windows",
+ScreenRectangle->{{0, 1280}, {0, 941}},
+WindowSize->{1272, 907},
+WindowMargins->{{0, Automatic}, {Automatic, 0}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 88, 2, 33, "Text"],
+Cell[1845, 55, 57, 1, 30, "Input"],
+Cell[1905, 58, 65, 1, 30, "Input"],
+Cell[1973, 61, 50, 1, 30, "Input"],
+Cell[2026, 64, 398, 6, 52, "Text"],
+
+Cell[CellGroupData[{
+Cell[2449, 74, 52, 1, 30, "Input"],
+Cell[2504, 77, 93, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2634, 83, 61, 1, 30, "Input"],
+Cell[2698, 86, 53, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2788, 92, 61, 1, 30, "Input"],
+Cell[2852, 95, 45, 1, 29, "Output"]
+}, Open  ]],
+Cell[2912, 99, 69, 1, 30, "Input"],
+
+Cell[CellGroupData[{
+Cell[3006, 104, 91, 1, 30, "Input"],
+Cell[3100, 107, 60, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3197, 113, 54, 1, 30, "Input"],
+Cell[3254, 116, 332, 10, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3623, 131, 55, 1, 30, "Input"],
+Cell[3681, 134, 44, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3762, 140, 55, 1, 30, "Input"],
+Cell[3820, 143, 308, 10, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4165, 158, 63, 1, 30, "Input"],
+Cell[4231, 161, 58, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4326, 167, 48, 1, 30, "Input"],
+Cell[4377, 170, 326, 10, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4740, 185, 52, 1, 30, "Input"],
+Cell[4795, 188, 46, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4878, 194, 49, 1, 30, "Input"],
+Cell[4930, 197, 298, 9, 43, "Output"]
+}, Open  ]],
+Cell[5243, 209, 2120, 53, 84, "Input"],
+Cell[7366, 264, 88, 2, 33, "Text"],
+
+Cell[CellGroupData[{
+Cell[7479, 270, 60, 1, 30, "Input"],
+Cell[7542, 273, 39, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7618, 279, 60, 1, 30, "Input"],
+Cell[7681, 282, 35, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7753, 288, 56, 1, 30, "Input"],
+Cell[7812, 291, 46, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7895, 297, 54, 1, 30, "Input"],
+Cell[7952, 300, 300, 9, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8289, 314, 48, 1, 30, "Input"],
+Cell[8340, 317, 39, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8416, 323, 49, 1, 30, "Input"],
+Cell[8468, 326, 59, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8564, 332, 48, 1, 30, "Input"],
+Cell[8615, 335, 311, 9, 44, "Output"]
+}, Open  ]],
+Cell[8941, 347, 1474, 36, 62, "Input"]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

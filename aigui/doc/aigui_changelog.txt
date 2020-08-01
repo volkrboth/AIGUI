@@ -1,0 +1,112 @@
+2009-08-04  V1.54b
+1. ReadNetlist: Beim erstellen des Mathematica-Commands in Dateiname für Grafikfile Backslash verdoppelt
+2. Anzeigefenster für Mathematica-Grafik überarbeitet, Refresh-Problem beseitigt 
+2009-08-04  V1.54a
+1. in aiguiconf.xml weitere Befehle zur Initialisierung
+2. Frequenzmarker im RootLocusPlot wahlweise Kreis, Rechteck, beides oder nichts
+3. Interaktion zwischen P/Z-Liste und Bodeplot
+4. Kleinere Bugs behoben
+2009-08-03  V1.54
+1. PolesAndZerosByQZ
+  - Anzeige des Bode-Plot
+2. Historie der letzten geöffneten Files im File Menü
+3. PoleZeroPlot : Bei Frequenzänderungen wird Rechteck statt Kreis angezeigt
+4. Filter mit mehrfachen Extensions in aigui.conf  (z.B. *.ai und *.ain in einem Filter)
+5. Beim Erzeugen einer neuen Box wird diese automatisch geöffnet.
+5. Weitere kleine Verbesserungen
+ 
+2009-07-31  V1.53
+1. Neugestalung RootLocusByQZ:
+   - Tabelle mit Parameter
+   - Sweeps im State merken
+   - GIF-File in User-Verzeichnis
+   - Befehle für Mathematica Version 6 angepasst
+   - Oberfläche und Bedienung verbessert
+2. PolesAndZerosByQZ
+   - Interaktion zwischen Pole/Zero-Liste und Plot-Fenster.
+   
+2009-07-21  V1.52
+1. In Circuit Equations die Options Model Library und ElementValues richtig übernehmen
+2. Optionen bei Approximate Determinant korrigiert
+3. Variable characteristicPolynom korrigiert
+
+2009-02-20  V1.50
+1. Neue Plot-Ausgaben für alle Bode-Plots
+
+2008-07-08  V1.43
+1. Fehler bei Speichern in Notebook (Dateiname von AIStyle.nb) behoben
+2. Bode Plot Options in ACAnalysis
+3. Fehler bei Speichern in ApproximateTransferFunction behoben
+4. Start von einem anderen Verzeichnis ist möglich, wenn die Umgebungsvariable AIGUI_INSTALL_PATH gesetzt wurde.
+   Siehe start_aigui.csh und startWinJar.bat
+   
+2008-06-22  V1.42
+1. Laden alter States wird besser unterstützt
+2. Übernahme des geänderten Working Directory als Standard bei Dateiauswahl
+3. Weitermelden des veränderten Analysesignals korrigiert (ACAnalysis, Approx.Matrix, Solve, CompressMatrix)
+
+2008-06-09  V1.41
+1. Weitermelden des Ereignisses, wenn das zu analysierende Signal in CircuitEquations geändert wurde (ACAnalysis, Approx.Matrix)
+
+2008-06-06  V1.4
+1. Modernisierte Oberfläche
+2. Name des geladenen State wird in der Titelzeile angezeigt.
+3. Mehrzeiliger Texteditor mit Undo-Funktion und Evaluate-Button in "Initialization"
+4. Erweiterte Einstellmöglichkeiten durch Optiongroups in aiguiconf.xml (siehe "CircuitEquations")
+5. Anzeige des gewählten Signals in "CircuitEquations", "SimulationData", "CompressMatrixEquation" und "Solve"
+6. Vom gewählten Simulator abhängige Dateifilter in "Netlist" und "SimulationData" (konfigurierbarin aiguiconf.xml)
+7. Speichern mit Save und SaveAs möglich
+8. Globale Optionen in "Initialization" einstellbar, defaults werden automatisch aus Analog Insydes geladen
+9. Abfrage, ob gespeichert werden soll, kommt nur, wenn etwas geändert wurde.
+
+2008-04-14   V1.3
+1. Code Optimierung und Fehlerbehebung
+2. Konfigurations- und Statedateien im XML-Format
+3. Löschen von Funktionen mit Nachfolgern
+4. Look&Feel an System angepasst, einstellbar in applicationProperties.xml (key="LookAndFeel": default oder system)
+   Bei Problemen die Zeile 
+      <entry key="LookAndFeel">default</entry>
+	in applicationProperties.xml einfügen.
+
+2007-07-18
+1. Trennung von Sourcecode und Binaries im Eclipse-Projekt.
+2. Erstellung von aigui.jar. Zur Ausführung ist jetzt nur noch diese Datei + JLink.jar erforderlich.
+   Code: Weil JARs keine relativen Pfade (../xxx) untertützen, wurde die GUIHelper.createIconImage und alle Aufrufe angepasst.
+   createIconImage wird nur der Name ohne Pfad übergeben.
+3. Anpassung der About-Box mit IMMS-Logo
+4. Speicherort für die User-Configuration von System-Configuration getrennt.
+   Die User-Configuration wird im Home-Verzeichnis, Unterverzeichnis aigui gespeichert.
+   in Windows    C:\Dokumente und Einstellungen\<username>\aigui
+   in Unix/Linux ~/aigui
+   Dort werden die Dateien "applicationProperties" und "temporary.nb" abgelegt.
+5. Alle Pfadangaben mit einfachen Backslashs, bisher kamen \\ oder gar \\\\ in Pfaden vor.
+   ACHTUNG: In gespeicherten States aus früheren Versionen müssen in allen Pfadangeben
+            mehrfache Backslashes ( \\ ) durch enfache ( \ ) ersetzt werden.
+6. Versionsnummer eingefuhrt (1.2) und in Aboutbox sichtbar.
+7. IFX - Erweiterungen aus Initialisierung entfernt
+8. Fehler bei Auswahl der Simulatoren in ReadSimulationData beseitigt, nun ist auch Spectre auswählbar.
+
+-------------------------------------------------------------------------------------------------------------
+2007-02-09
+MathAnalog
+
+    Wenn in den Settings OS "other" und ein Link in der form nnnnn@host angegeben ist, wird ein Remote-Kernel-Link erzeugt
+    Der Kernel muss vorher mit math -mathlink -linkcreate auf dem remote host erzeugt worden sein.Der Button "Browse" ist nun sinnlos, hier könnte ein Testbutton für den Link sein.
+
+SimulationData
+
+    Wenn kein Simulationsfile angegeben wurde, werden keine Aktionen durchgeführt.
+    Der Range muss aber angegeben werden.
+
+ACAnalysis
+
+    Das Kommando BodePlot wird ohne Referenzsignal erzeugt, wenn kein Simulationsfile angegeben wurde.
+    Im gespeicherten Notebook ist es aber noch drin, wird später behoben.
+
+Anmerkungen
+
+   1. Die Box SimData muss mit angelegt werden. Wenn keine Simulationsdatei angegeben wurde, werden keine Aktionen mit Simulatordaten versucht.
+      Der Range muss aber für die AC-Analyse angegeben werden. Besser wäre es, den Range erst dort anzugeben.
+   2. Die Verwendung eines Remote-Kernels geht prinzipiell, für die Ausgabe von Formeln und Grafik ist aber ein Notebook als Frontend notwendig. Ausgaben in dieser Form konnte ich deshalb nicht testen. Unter Unix (Math. 4) gehen Formeln und Grafiken auch nicht.
+   3. Die aktuellen Änderungen sind nur ein Patch. Es gibt einige Sachen, die noch verbessert werden sollten, wie z.B. Eingabe-Verifizierung beim Schliessen eines Dialoges, nicht immer das komplette Notebook von Anfang bis Ende berechnen, Trennung von Code und Daten im Projekt, Code-Optimierungen. Das erfordert aber größere Änderungen und für mich ein besseres Testumfeld.
+   

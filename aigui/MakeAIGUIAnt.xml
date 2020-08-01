@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project aigui">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+	<property name="build"  value="${basedir}${file.separator}bin"/>
+	<property name="vendor" value="TU Ilmenau, Germany"/>
+	<tstamp>
+		<format property="TSTAMP"  pattern="yyyy-MM-dd'T'HH:mm:ssZ"/>
+	</tstamp>
+	<!-- Verionsverwaltung: in properties/Version.txt stehen die Verions-Properties
+         Bei jedem Aufruf wird der BuildLevel um 1 erhoeht.
+         MajorBuild, MinorBuid und PatchLevel werden manuell eingetragen 
+      -->
+	<target name="incrementBuild">
+		<propertyfile file="src${file.separator}aidc${file.separator}aigui${file.separator}AiguiVersion.properties">
+			<entry key="BuildLevel" type="int" default="0" operation="+"/>
+			<entry key="TimeStamp"  type="string" value="${TSTAMP}" operation="="/>
+			<entry key="Vendor"     type="string" value="${vendor}" operation="="/>
+		</propertyfile>
+	</target>
+	<target name="preBuild" depends="incrementBuild">
+		<!-- Version text file-->
+		<copy
+	   file="src${file.separator}aidc${file.separator}aigui${file.separator}AiguiVersion.properties"
+	   tofile="${build}${file.separator}aidc${file.separator}aigui${file.separator}AiguiVersion.properties"
+		/>
+	</target>
+    <target name="create_run_jar" depends="preBuild">
+        <jar destfile="${basedir}/redist/aigui.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="aidc.aigui.Gui"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${basedir}/bin"/>
+            <!--zipfileset excludes="META-INF/*.SF" src="$basedir/JLink-Windows/JLink.jar"/ -->
+        </jar>
+    </target>
+</project>
